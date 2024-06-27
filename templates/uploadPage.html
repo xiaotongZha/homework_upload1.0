@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .content{
+            display: flex;
+            flex-direction: column;
+            width: 800px;
+            height: 900px;
+            background-color: rgb(230, 254, 214);
+            margin: auto;
+        }
+        .submit-box{
+            width: 500px;
+            margin: 0 auto;
+        }
+        .cnt-box{
+            width: 600px;
+            height: 250px;
+            overflow: auto;
+            background-color: rgb(255, 255, 255);
+            margin: 0 auto;
+        }
+        .cnt-box ul{
+            list-style: none;
+        }
+        .log-box{
+            width: 600px;
+            height: 250px;
+            overflow: auto;
+            background-color:  rgb(255, 255, 255);
+            margin: 0 auto;
+        }
+        .log-box ul{
+            list-style: none;
+        }
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 240px;
+            /* 设置上传框的宽度 */
+            height: 100px;
+            /* 设置上传框的高度 */
+            background-color: #f2f2f2;
+            /* 设置背景色为淡灰色 */
+            border: 2px dashed #999;
+            /* 设置边框为虚线 */
+            border-radius: 10px;
+            /* 设置边框圆角 */
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        .file-label {
+            cursor: pointer;
+            display: block;
+            padding-top: 20%;
+            text-align: center;
+            font-size: 16px;
+            width: 100%;
+            height: 20%;
+            margin: auto 0;
+            color: #bdbdbd;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            display: block;
+            text-align: center;
+            color: #777;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="submit-box">
+            <h1 style="text-align: center;">{{ task_title }}</h1>
+            <h4 style="text-align: center;font-weight: normal;">程序会自动重命名文件</h4>
+            <div style="display: block;height: 20px;"></div>
+            <form action="upload" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="taskType" value="{{task}}">
+                <div>
+                    <label for="dropdown" style="font-size: larger;">选择学号姓名:</label>
+                    <span style="display: inline-block; width: 92px;"></span>
+                    <select name="dropdown" style="width: 240px;height: 30px ;font-size: larger;">
+                        {% for option in options %}
+                        <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="display: block;height: 20px;"></div>
+                <div style="display: flex;">
+                    <label style="font-size: larger;  display: flex;align-items: center;">选择你的文件:</label>
+                    <span style="display: inline-block; width: 100px;"></span>
+                    <div style="width: 200px;display: flex;flex-direction: column;justify-content: center;align-items:start;">
+                        <div class="file-upload">
+                            <input type="file" name="file" id="file-input" class="file-input">
+                            <label for="file-input" class="file-label">Choose a file...</label>
+                        </div>
+                        <span id="file-name" class="file-name"></span>
+                    </div>
+                </div>
+                <div style="display: block;height: 20px;"></div>
+                <div style="display: flex;justify-content: center;">
+                    <button type="submit" style="width: 150px;height: 50px;font-size: 25px;">提交</button>
+                </div>
+            </form>
+        </div>
+        <div style="display: block;height: 20px;"></div>
+        <div class="cnt-box">
+            <h3>已提交 {{ tot_num }} 人:</h3>
+            <ul>
+                {% for stu in stu_list %}
+                <li>{{ stu }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div style="display: block;height: 10px;"></div>
+        <div class="log-box">
+            <h3>提交记录:</h3>
+            <ul>
+                {% for log in log_list %}
+                <li>{{ log }}</li>
+                {% endfor %}  
+            </ul>
+        </div>
+    </div>
+    <script>
+        document.getElementById('file-input').addEventListener('change', function () {
+            const fileInput = this;
+            const fileName = document.getElementById('file-name');
+            if (fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+            } else {
+                fileName.textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>
